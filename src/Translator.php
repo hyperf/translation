@@ -273,7 +273,7 @@ class Translator implements TranslatorInterface
         $segments = $this->parsed[$key] = $parsed;
 
         if (is_null($segments[0])) {
-            $segments[0] = '*';
+            $segments[0] = $this->parsed[$key][0] = '*';
         }
 
         return $segments;
