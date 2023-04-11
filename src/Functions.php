@@ -11,12 +11,21 @@ declare(strict_types=1);
  */
 use Hyperf\Contract\TranslatorInterface;
 use Hyperf\Utils\ApplicationContext;
+use Hyperf\httpServer\Request;
 
 if (! function_exists('__')) {
     function __(string $key, array $replace = [], ?string $locale = null)
     {
         $translator = ApplicationContext::getContainer()->get(TranslatorInterface::class);
         return $translator->trans($key, $replace, $locale);
+    }
+}
+
+if (! function_exists('t')) {
+    function t(string $key, array $replace = []): string
+    {
+        $acceptLanguage = ApplicationContext::getContainer()->get(Request::class)->getHeaderLine('accept-language');
+        return __($key, $replace, !empty($acceptLanguage) ? explode(',',$acceptLanguage)[0] : 'zh_CN');
     }
 }
 
